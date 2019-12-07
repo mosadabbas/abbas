@@ -1,349 +1,354 @@
-//Maxthecoder aka Max Jeanphilippe
+//C++ include header files
 #include <iostream>
-#include <string>
 #include <cstdlib>
-#include <time.h>
+#include <chrono>
+#include <string>
 #include <array>
+#include <future>
+#include <time.h>
 
 using namespace std;
 
-class toetactic
+class TicTacToe
 {
 
 private:
 
-	string p1 = "", p2 = ""; //string containers for player names
-	int p1score = 0, p2score = 0, drawscore = 0, menuchoice = 0, boxchoice = 0; //int containers for scores and choices
-	char p1symbol = 'X', p2symbol = 'O'; //X and O symbols for players
-	//char array[9] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' }; //the tictactoe boards that holds X or O
-	int turn = 1; //initialized player1's turn to start game
-	bool istherewinner = false; //flag that confirms is there a winner currently and is used in my checkwinner functions
-	int compmove = 0;//marker for comp to choose moves
-	int totalmovecounter = 0;// container for total moves for draw
-	//int compchoice = 0;//int container for comp choice
+	string first_player = "", second_player = ""; //player name string
+	int first_player_score = 0, second_player_score = 0, draw_score = 0, menu_choice = 0;
+	char box_choice = 0; //varibales to store scores
+	char first_player_symbol = 'X', second_player_symbol = 'O'; //deciding the symbols for the players
+	int player_turn = 1; //STart with first_player turn
+	bool there_is_winner = false; //set no player win in start
+	int computer_move = 0;//making to start move from computer
+	int total_move_counter = 0;// count the moves
 
 public:
 
-	
-	toetactic() : array({ { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' } }) {//default constructor that calls the main menu function
-		
+	TicTacToe() : game_array({ { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' } }) {//calling constructor
+
 	}
-	//toetactic(int a) { mmenu(); }
-	std :: array<char, 9> array;
-	void displayboard() //board display function
+	std::array<char, 9> game_array;
+	void display_board() //Match board
 	{
-		system("cls");
-		cout << "		          T!C-t@c-TOe			             Maxthecoder\n";
-		cout << "		          ~~~~~~~~~~\n";
-		cout << "			 ___ ___ ___" << endl << endl;
-		cout << "			 " << array[0] << " | " << array[1] << " | " << array[2] << " " << endl;
-		cout << "			 ___ ___ ___" << endl << endl;
-		cout << "			 " << array[3] << " | " << array[4] << " | " << array[5] << " " << endl;
-		cout << "			 ___ ___ ___" << endl << endl;
-		cout << "			 " << array[6] << " | " << array[7] << " | " << array[8] << " " << endl;
-		cout << "			 ___ ___ ___" << endl << endl;
+		cout << "		          TIC TAC TOE\n";
+		cout << "			 " << game_array[0] << " | " << game_array[1] << " | " << game_array[2] << "\n";
+		cout << "			 ___ ___ ___\n\n";
+		cout << "			 " << game_array[3] << " | " << game_array[4] << " | " << game_array[5] << "\n";
+		cout << "			 ___ ___ ___\n\n";
+		cout << "			 " << game_array[6] << " | " << game_array[7] << " | " << game_array[8] << "\n";
 	}
 
-	void setboardwithchoice(int c) //this function takes the choice and matches it to the proper board box
+	void setting_board_choices(char choice) //Take player enetered choice on the board
 	{
-		switch (c)
+		switch (choice)
 		{
-		case 1:
-			if (turn % 2 != 0) { array[0] = p1symbol; }
-			else array[0] = p2symbol; break;
+		case 'A':
+			if (player_turn % 2 != 0) { game_array[0] = first_player_symbol; }
+			else game_array[0] = second_player_symbol; break;
 
-		case 2:
-			if (turn % 2 != 0) { array[1] = p1symbol; }
-			else array[1] = p2symbol; break;
+		case 'B':
+			if (player_turn % 2 != 0) { game_array[1] = first_player_symbol; }
+			else game_array[1] = second_player_symbol; break;
 
-		case 3:
-			if (turn % 2 != 0) { array[2] = p1symbol; }
-			else array[2] = p2symbol; break;
+		case 'C':
+			if (player_turn % 2 != 0) { game_array[2] = first_player_symbol; }
+			else game_array[2] = second_player_symbol; break;
 
-		case 4:
-			if (turn % 2 != 0) { array[3] = p1symbol; }
-			else array[3] = p2symbol; break;
+		case 'D':
+			if (player_turn % 2 != 0) { game_array[3] = first_player_symbol; }
+			else game_array[3] = second_player_symbol; break;
 
-		case 5:
-			if (turn % 2 != 0) { array[4] = p1symbol; }
-			else array[4] = p2symbol; break;
+		case 'E':
+			if (player_turn % 2 != 0) { game_array[4] = first_player_symbol; }
+			else game_array[4] = second_player_symbol; break;
 
-		case 6:
-			if (turn % 2 != 0) { array[5] = p1symbol; }
-			else array[5] = p2symbol; break;
+		case 'F':
+			if (player_turn % 2 != 0) { game_array[5] = first_player_symbol; }
+			else game_array[5] = second_player_symbol; break;
 
-		case 7:
-			if (turn % 2 != 0) { array[6] = p1symbol; }
-			else array[6] = p2symbol; break;
+		case 'G':
+			if (player_turn % 2 != 0) { game_array[6] = first_player_symbol; }
+			else game_array[6] = second_player_symbol; break;
 
-		case 8:
-			if (turn % 2 != 0) { array[7] = p1symbol; }
-			else array[7] = p2symbol; break;
+		case 'H':
+			if (player_turn % 2 != 0) { game_array[7] = first_player_symbol; }
+			else game_array[7] = second_player_symbol; break;
 
-		case 9:
-			if (turn % 2 != 0) { array[8] = p1symbol; }
-			else array[8] = p2symbol; break;
+		case 'I':
+			if (player_turn % 2 != 0) { game_array[8] = first_player_symbol; }
+			else game_array[8] = second_player_symbol; break;
 		}
 	}
-
-	void displayscore() //my scoreboard
+//this function has been used to display the score
+	void display_score() //Displaying score
 	{
-		cout << "		            SCORE\n";
+		cout << "		            Total scoring\n";
 		cout << "		            ~~~~~\n";
-		cout << "	  " << p1 << "		    DRAW		" << p2 << endl;
-		cout << "	   " << p1score << "	 	      " << drawscore << "			 " << p2score << endl << endl;
+		cout << "	  " << first_player << "		    draws		" << second_player << "\n";
+		cout << "	   " << first_player_score << "	 	      " << draw_score << "			 " << second_player_score << "\n\n";
 
 	}
 
-	void hrungetmove() //I called it hrun getmove because it is specifically for a 2 human player game mode that allows for taking of turns and checking the board for a winner after everyturn then incrementing the turn variable
+	void two_player_moves() //Used when two players are playing check for winner
 	{
 		do {
-			displayboard();
-			if (turn % 2 != 0)
+			display_board();
+			if (player_turn % 2 != 0)
 			{
-				cout << p1 << " which numbered box do you choose?";
-				cin >> boxchoice;
-				setboardwithchoice(boxchoice);
-				totalmovecounter++;
+				cout << first_player << " Select Box";
+			
+				cin >> box_choice;
+				setting_board_choices(box_choice);
+				total_move_counter++;
 			}
 			else
 			{
-				cout << p2 << " which numbered box do you choose?";
-				cin >> boxchoice;
-				setboardwithchoice(boxchoice);
-				totalmovecounter++;
+				cout << second_player << " Select Box";
+				
+				cin >> box_choice;
+				setting_board_choices(box_choice);
+				total_move_counter++;
 			}
-			hcheckforwin();
-			++turn;
-		} while (istherewinner == false);
+			check_winner_from_two_player(0);
+			++player_turn;
+		} while (there_is_winner == false);
 
 	}
 
-
-	void hcheckforwin() //checks for wins then provides a menu
+// to check who is the winner between both players
+	void check_winner_from_two_player(int i) //Logics to decide winner
 	{
-		if (((array[0] == 'X') && (array[1] == 'X') && (array[2] == 'X')) || ((array[3] == 'X') && (array[4] == 'X') && (array[5] == 'X')) || ((array[6] == 'X') && (array[7] == 'X') && (array[8] == 'X'))) { displayboard(); istherewinner = true; cout << p1 << " is the WINNER with a horizontal win!\n\n"; ++p1score; displayscore(); hmenu(); }
-		else if (((array[0] == 'O') && (array[1] == 'O') && (array[2] == 'O')) || ((array[3] == 'O') && (array[4] == 'O') && (array[5] == 'O')) || ((array[6] == 'O') && (array[7] == 'O') && (array[8] == 'O'))) { displayboard(); istherewinner = true; cout << p2 << " is the WINNER with a horizontal win!\n\n"; ++p2score; displayscore(); hmenu(); }
-		else if (((array[0] == 'X') && (array[3] == 'X') && (array[6] == 'X')) || ((array[1] == 'X') && (array[4] == 'X') && (array[7] == 'X')) || ((array[2] == 'X') && (array[5] == 'X') && (array[8] == 'X'))) { displayboard(); istherewinner = true; cout << p1 << " is the WINNER with a vertical win!\n\n"; ++p1score; displayscore(); hmenu(); }
-		else if (((array[0] == 'O') && (array[3] == 'O') && (array[6] == 'O')) || ((array[1] == 'O') && (array[4] == 'O') && (array[7] == 'O')) || ((array[2] == 'O') && (array[5] == 'O') && (array[8] == 'O'))) { displayboard(); istherewinner = true; cout << p2 << " is the WINNER with a vertical win!\n\n"; ++p2score; displayscore(); hmenu(); }
-		else if (((array[0] == 'X') && (array[4] == 'X') && (array[8] == 'X')) || ((array[2] == 'X') && (array[4] == 'X') && (array[6] == 'X'))) { displayboard(); istherewinner = true; cout << p1 << " is the WINNER with a diagonal win!\n\n"; ++p1score; displayscore(); hmenu(); }
-		else if (((array[0] == 'O') && (array[4] == 'O') && (array[8] == 'O')) || ((array[2] == 'O') && (array[4] == 'O') && (array[6] == 'O'))) { displayboard(); istherewinner = true; cout << p2 << " is the WINNER with a diagonal win!\n\n"; ++p2score; displayscore(); hmenu(); }
+		if (((game_array[0] == 'X') && (game_array[1] == 'X') && (game_array[2] == 'X')) || ((game_array[3] == 'X') && (game_array[4] == 'X') && (game_array[5] == 'X')) || ((game_array[6] == 'X') && (game_array[7] == 'X') && (game_array[8] == 'X'))) { display_board(); there_is_winner = true; cout << first_player << " WINs by a horizontal match!\n\n"; ++first_player_score; display_score(); menu_after_game(); }
+		else if (((game_array[0] == 'O') && (game_array[1] == 'O') && (game_array[2] == 'O')) || ((game_array[3] == 'O') && (game_array[4] == 'O') && (game_array[5] == 'O')) || ((game_array[6] == 'O') && (game_array[7] == 'O') && (game_array[8] == 'O'))) { display_board(); there_is_winner = true; cout << second_player << " WINs by a horizontal match!\n\n"; ++second_player_score; display_score(); menu_after_game(); }
+		else if (((game_array[0] == 'X') && (game_array[3] == 'X') && (game_array[6] == 'X')) || ((game_array[1] == 'X') && (game_array[4] == 'X') && (game_array[7] == 'X')) || ((game_array[2] == 'X') && (game_array[5] == 'X') && (game_array[8] == 'X'))) { display_board(); there_is_winner = true; cout << first_player << " WINs by a vertical match!\n\n"; ++first_player_score; display_score(); menu_after_game(); }
+		else if (((game_array[0] == 'O') && (game_array[3] == 'O') && (game_array[6] == 'O')) || ((game_array[1] == 'O') && (game_array[4] == 'O') && (game_array[7] == 'O')) || ((game_array[2] == 'O') && (game_array[5] == 'O') && (game_array[8] == 'O'))) { display_board(); there_is_winner = true; cout << second_player << " WINs by a vertical match!\n\n"; ++second_player_score; display_score(); menu_after_game(); }
+		else if (((game_array[0] == 'X') && (game_array[4] == 'X') && (game_array[8] == 'X')) || ((game_array[2] == 'X') && (game_array[4] == 'X') && (game_array[6] == 'X'))) { display_board(); there_is_winner = true; cout << first_player << " WINs by a diagonal match!\n\n"; ++first_player_score; display_score(); menu_after_game(); }
+		else if (((game_array[0] == 'O') && (game_array[4] == 'O') && (game_array[8] == 'O')) || ((game_array[2] == 'O') && (game_array[4] == 'O') && (game_array[6] == 'O'))) { display_board(); there_is_winner = true; cout << second_player << " WINs by a diagonal match!\n\n"; ++second_player_score; display_score(); menu_after_game(); }
+		else if (i == 1){ display_board(); there_is_winner = true; cout << second_player << " First player timed out!\n\n"; ++second_player_score; display_score(); menu_after_game(); }
+		else if (i == 2){ display_board(); there_is_winner = true; cout << first_player << " Second player timed out!\n\n"; ++first_player_score; display_score(); menu_after_game(); }
 
-		else if (totalmovecounter == 9){
-			displayboard(); istherewinner = true; cout << "THERE IS NO WINNER! IT IS A DRAW\n\n"; ++drawscore; displayscore(); hmenu();
+		else if (total_move_counter == 9){
+			display_board(); there_is_winner = true; cout << "Match Drawn\n\n"; ++draw_score; display_score(); menu_after_game();
 		}
 	}
 
-	void crun()
+	void computer_run()
 	{
-		if (p1 == "COMP")
+		if (first_player == "computer_player")
 			do {
-				compstrategy();
-				totalmovecounter++;
-				hcheckforwin();
-				++turn;
-				displayboard();
-				cout << p2 << " which numbered box do you choose?";
-				cin >> boxchoice;
-				setboardwithchoice(boxchoice);
-				totalmovecounter++;
-				hcheckforwin();
-				++turn;
-			} while (istherewinner == false);
-		else if (p2 == "COMP")
+				computer_strategy();
+				total_move_counter++;
+				check_winner_from_two_player(0);
+				++player_turn;
+				display_board();
+				cout << second_player << " Select Box";
+				cin >> box_choice;
+				setting_board_choices(box_choice);
+				total_move_counter++;
+				check_winner_from_two_player(0);
+				++player_turn;
+			} while (there_is_winner == false);
+		else if (second_player == "computer_player")
 			do {
-				displayboard();
-				cout << p1 << " which numbered box do you choose?";
-				cin >> boxchoice;
-				setboardwithchoice(boxchoice);
-				totalmovecounter++;
-				hcheckforwin();
-				++turn;
-				compstrategy();
-				totalmovecounter++;
-				hcheckforwin();
-				++turn;
-			} while (istherewinner == false);
+				display_board();// call display_board function
+				
+				cout << first_player << " Select Box";
+				cin >> box_choice;
+				setting_board_choices(box_choice);
+				total_move_counter++;
+				check_winner_from_two_player(0);
+				++player_turn;
+				computer_strategy();
+				total_move_counter++;
+				check_winner_from_two_player(0);
+				++player_turn;
+			} while (there_is_winner == false);
 
 	}
 
-
-	void compstrategy()
+//This function has been designed for moving the computer turn
+	void computer_strategy()
 	{
-		if (p1 == "COMP" && compmove == 0) { setboardwithchoice(5); compmove++; }
+		if (first_player == "computer_player" && computer_move == 0) { setting_board_choices('E'); computer_move++; }
 
-		else if (p1 == "COMP"&& compmove == 1)
+		else if (first_player == "computer_player"&& computer_move == 1)
 		{
-			if (array[2] == '3') { setboardwithchoice(3); compmove++; }
-			else if (array[8] == '9') { setboardwithchoice(9); compmove++; }
+			if (game_array[2] == 'C') { setting_board_choices('C'); computer_move++; }
+			else if (game_array[8] == 'I') { setting_board_choices('I'); computer_move++; }
 		}
 
-		else if (p1 == "COMP"&& compmove == 2)
+		else if (first_player == "computer_player"&& computer_move == 2)
 		{
-			if (array[2] == 'X') {
-				if (array[6] == '7') { setboardwithchoice(7); compmove++; }
-				else if (array[8] == '9') { setboardwithchoice(9); compmove++; }
-				else if (array[0] == '1') { setboardwithchoice(1); compmove++; }
+			if (game_array[2] == 'X') {
+				if (game_array[6] == 'G') { setting_board_choices('G'); computer_move++; }
+				else if (game_array[8] == 'I') { setting_board_choices('I'); computer_move++; }
+				else if (game_array[0] == 'A') { setting_board_choices('A'); computer_move++; }
 			}
-			if (array[8] == 'X') {
-				if (array[0] == '1') { setboardwithchoice(1); compmove++; }
-				else if (array[6] == '7') { setboardwithchoice(7); compmove++; }
-			}
-		}
-
-		else if (p1 == "COMP"&& compmove == 3)
-		{
-			if (array[2] == 'X') {
-				if (array[5] == '6') { setboardwithchoice(6); compmove++; }
-				else if (array[0] == '1') { setboardwithchoice(1); compmove++; }
-			}
-			if (array[8] == 'X') {
-				if (array[7] == '8') { setboardwithchoice(8); compmove++; }
-				else if (array[2] == '3') { setboardwithchoice(3); compmove++; }
+			if (game_array[8] == 'X') {
+				if (game_array[0] == 'A') { setting_board_choices('A'); computer_move++; }
+				else if (game_array[6] == 'G') { setting_board_choices('G'); computer_move++; }
 			}
 		}
 
-		else if (p2 == "COMP" && compmove == 0)
+		else if (first_player == "computer_player"&& computer_move == 3)
 		{
-			if (array[4] == '5') { setboardwithchoice(5); compmove++; }
-			else if (array[2] == '3') { setboardwithchoice(3); compmove++; }
+			if (game_array[2] == 'X') {
+				if (game_array[5] == 'F') { setting_board_choices('F'); computer_move++; }
+				else if (game_array[0] == 'A') { setting_board_choices('A'); computer_move++; }
+			}
+			if (game_array[8] == 'X') {
+				if (game_array[7] == 'H') { setting_board_choices('H'); computer_move++; }
+				else if (game_array[2] == 'C') { setting_board_choices('C'); computer_move++; }
+			}
+		}
+
+		else if (second_player == "computer_player" && computer_move == 0)
+		{
+			if (game_array[4] == 'E') { setting_board_choices('E'); computer_move++; }
+			else if (game_array[2] == 'C') { setting_board_choices('C'); computer_move++; }
 		}
 
 
-		else if (p2 == "COMP"&& compmove == 1)
+		else if (second_player == "computer_player"&& computer_move == 1)
 		{
-			if (array[2] == '3') { setboardwithchoice(3); compmove++; }
-			else if (array[8] == '9') { setboardwithchoice(9); compmove++; }
+			if (game_array[2] == 'C') { setting_board_choices('C'); computer_move++; }
+			else if (game_array[8] == 'I') { setting_board_choices('I'); computer_move++; }
 		}
 
-		else if (p2 == "COMP"&& compmove == 2)
+		else if (second_player == "computer_player"&& computer_move == 2)
 		{
-			if (array[2] == 'O') {
-				if (array[6] == '7') { setboardwithchoice(7); compmove++; }
-				else if (array[8] == '9') { setboardwithchoice(9); compmove++; }
-				else if (array[0] == '1') { setboardwithchoice(1); compmove++; }
+			if (game_array[2] == 'O') {
+				if (game_array[6] == 'G') { setting_board_choices('G'); computer_move++; }
+				else if (game_array[8] == 'I') { setting_board_choices('I'); computer_move++; }
+				else if (game_array[0] == 'A') { setting_board_choices('A'); computer_move++; }
 
 			}
-			if (array[8] == 'O') {
-				if (array[6] == '7') { setboardwithchoice(7); compmove++; }
-				else if (array[0] == '1') { setboardwithchoice(1); compmove++; }
+			if (game_array[8] == 'O') {
+				if (game_array[6] == 'G') { setting_board_choices('G'); computer_move++; }
+				else if (game_array[0] == 'A') { setting_board_choices('A'); computer_move++; }
 			}
 		}
-		else if (p2 == "COMP"&& compmove == 3)
+		else if (second_player == "computer_player"&& computer_move == 3)
 		{
-			if (array[2] == 'O') {
-				if (array[5] == '6') { setboardwithchoice(6); compmove++; }
-				else if (array[0] == '1') { setboardwithchoice(1); compmove++; }
+			if (game_array[2] == 'O') {
+				if (game_array[5] == 'F') { setting_board_choices('F'); computer_move++; }
+				else if (game_array[0] == 'A') { setting_board_choices('A'); computer_move++; }
 			}
-			if (array[8] == 'O') {
-				if (array[0] == '1') { setboardwithchoice(1); compmove++; }
-				if (array[7] == '8') { setboardwithchoice(8); compmove++; }
-				else if (array[2] == '3') { setboardwithchoice(3); compmove++; }
+			if (game_array[8] == 'O') {
+				if (game_array[0] == 'A') { setting_board_choices('A'); computer_move++; }
+				if (game_array[7] == 'H') { setting_board_choices('H'); computer_move++; }
+				else if (game_array[2] == 'C') { setting_board_choices('C'); computer_move++; }
 			}
 		}
-		else if (p2 == "COMP"&& compmove == 4)
+		else if (second_player == "computer_player"&& computer_move == 4)
 		{
-			if (array[2] == 'O') {
-				if (array[5] == '6') { setboardwithchoice(6); compmove++; }
-				else if (array[0] == '1') { setboardwithchoice(1); compmove++; }
+			if (game_array[2] == 'O') {
+				if (game_array[5] == 'F') { setting_board_choices('F'); computer_move++; }
+				else if (game_array[0] == 'A') { setting_board_choices('A'); computer_move++; }
 			}
-			if (array[8] == 'O') {
-				if (array[7] == '8') { setboardwithchoice(8); compmove++; }
-				else if (array[2] == '3') { setboardwithchoice(3); compmove++; }
+			if (game_array[8] == 'O') {
+				if (game_array[7] == 'H') { setting_board_choices('H'); computer_move++; }
+				else if (game_array[2] == 'C') { setting_board_choices('C'); computer_move++; }
 			}
 		}
 	}
 
+//when the game is over it display the another menu to user to select
 
-
-	void hmenu()
+	void menu_after_game()
 	{
-		cout << "1.Play Again?\n2.Main Menu\n3.Quit\n";
-		cin >> menuchoice;
-		switch (menuchoice)
+		cout << "1.Restart Play.\n2.Go To Menu\n3.Close\n";
+		cin >> menu_choice;
+		switch (menu_choice)
 		{
 		case 1:
-			hresetboard();
-			if (p1 == "COMP" || p2 == "COMP") { crun(); }
-			else { hrungetmove(); }
+			reset_board();
+			if (first_player == "computer_player" || second_player == "computer_player") { computer_run(); }
+			else { two_player_moves(); }
 			break;
 
-		case 2:resetscores(); hresetboard(); mmenu(); break;
+		case 2:reset_scores(); reset_board(); main_menu(); break;
 
 		case 3: exit(0);
 		}
 	}
-
-	void mmenu()
+//switch cases to display the menu system
+	void main_menu()
 	{
-		system("cls");
-		cout << "		 Welcome to Maxthecoder's Console\n			  T!C-t@c-TOe\n\n";
-		cout << "			  Main Menu\n";
-		cout << "			  ~~~~~~~~~\n";
-		cout << "			1. vs COMPUTER\n";
-		cout << "			2. 2 Human Players\n";
-		cout << "			3. How to Play T!C-t@c-TOe?\n";
-		cout << "			4. Quit\n\n";
-		cin >> menuchoice;
+		//display menu system
+		cout << "		 TIC TAC TOE\n";
+		cout << "			  Menu\n";
+		cout << "			  ~~~~~~~~\n";
+		cout << "			1. vs COMPUTERs\n";
+		cout << "			2. Two Players\n";
+		cout << "			3. Help\n";
+		cout << "			4. Close\n\n";
+		cin >> menu_choice;
 
-		switch (menuchoice)
+		switch (menu_choice)
 		{
-		case 1:cout << "CHOOSE:\n1.Player1\n2.Player2\n";
-			cin >> menuchoice;
-			if (menuchoice == 1) {
-				p2 = "COMP"; cout << "What is your nickname Player 1?\n"; cin >> p1;
+		//if user select choice 1
+		case 1:cout << "CHOOSE:\n1.First Player\n2.Second Player\n";
+			cin >> menu_choice;
+			if (menu_choice == 1) {
+				second_player = "computer_player"; cout << "First Player Enter your virtaul name.\n"; cin >> first_player;
 			}
-			else { p1 = "COMP"; cout << "What is your nickname Player 2?\n"; cin >> p2; }
-			crun();
+			else { first_player = "computer_player"; cout << "Second Player Enter your virtaul name.\n"; cin >> second_player; }
+			computer_run();
 			break;
 
 		case 2:
-			cout << "PLAYER 1 WHAT IS YOUR NICKNAME? ";
-			cin >> p1;
-			cout << "PLAYER 2 WHAT IS YOUR NICKNAME? ";
-			cin >> p2;
-			hrungetmove();
+			//if user select choice 2
+			cout << "First Player Enter your virtaul name. ";
+			cin >> first_player;
+			cout << "Second Player Enter your virtaul name. ";
+			cin >> second_player;
+			two_player_moves();
 			break;
 
 		case 3:
-			cout << "TAKE TURNS, GET 3 OF YOUR SYMBOLS IN A ROW AND YOU WIN! SIMPLE!\n";
-			system("pause"); mmenu(); break;
+			//if user select choice 3
+			cout << "Match 3 same symbols in a single line to win the game!\n";
+			main_menu(); break;
 
 		case 4: exit(0);
 		}
 	}
 
-	void resetscores(){ p1score = 0, p2score = 0, drawscore = 0, p1 = "", p2 = ""; }
-
-	void hresetboard()
+	void reset_scores(){ first_player_score = 0, second_player_score = 0, draw_score = 0, first_player = "", second_player = ""; }
+//to reset the board with initial state
+	void reset_board()
 	{
-		totalmovecounter = 0;
-		array[0] = '1';
-		array[1] = '2';
-		array[2] = '3';
-		array[3] = '4';
-		array[4] = '5';
-		array[5] = '6';
-		array[6] = '7';
-		array[7] = '8';
-		array[8] = '9';
-		turn = 1;
-		istherewinner = false;
-		compmove = 0;
+		total_move_counter = 0;
+		game_array[8] = 'I';
+		game_array[7] = 'H';
+		game_array[6] = 'G';
+		game_array[5] = 'F';
+		game_array[4] = 'E';
+		game_array[3] = 'D';
+		game_array[2] = 'C';
+		game_array[1] = 'B';
+		game_array[0] = 'A';
+		player_turn = 1;
+		there_is_winner = false;
+		computer_move = 0;
 	}
 
-
-
-
+	bool timer()
+	{
+		auto start = std::chrono::high_resolution_clock::now();
+		for (int i = 0; i<5; ++i)
+		{
+			cout << "Test" + i;
+			std::this_thread::sleep_until(start + (i + 1)*std::chrono::seconds(1));
+		}
+		return true;
+	}
 };
-
+//main function to control teh overall program
 int main()
 {
-	//srand(time(NULL));
-	system("COLOR 7C");
-	//toetactic b;
-	std::array<char, 9> std_ar2{ { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' } };
-	toetactic a;
-	a.mmenu();
-	system("PAUSE");
+	TicTacToe a; //create object of TicTacToe class
+	a.main_menu();
 }
